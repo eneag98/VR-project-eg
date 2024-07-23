@@ -361,9 +361,11 @@
 "Assets/CameraController.cs"
 "Assets/CharacterMovements.cs"
 "Assets/GameManager.cs"
+"Assets/GameTarget.cs"
 "Assets/LevelManager.cs"
 "Assets/Models/Animations/AnimationController.cs"
 "Assets/PlayerMovement.cs"
+"Assets/WallController.cs"
 -langversion:9.0
 
 /deterministic

@@ -13,14 +13,24 @@ public class PlayerMovement : MonoBehaviour
     public Camera camera;
     public Terrain playableTerrain;
 
+    [Header("Invisible Walls Detection")]
+    [SerializeField] LayerMask wallsLayer;
+    [SerializeField] Material wallMaterial;
+    public float deceleration = 0.2f;
+
     Animator _animator;
     Rigidbody _rigidBody;
+    CapsuleCollider _collider;
+    bool _wallCollisionCheck;
+
+    RaycastHit _wallHit;
 
     // Start is called before the first frame update
     void Start()
     {
         _animator = GetComponent<Animator>();
         _rigidBody = GetComponent<Rigidbody>();
+        _collider = GetComponent<CapsuleCollider>();
     }
 
     // Update is called once per frame
@@ -34,12 +44,13 @@ public class PlayerMovement : MonoBehaviour
         _animator.SetBool("isWalking", isWalking);
         _animator.SetBool("isRunning", runningPressed && isWalking);
 
+        /*
         if (!isWalking)
         {
             _rigidBody.useGravity = true;
             return;
         } else
-            _rigidBody.useGravity = false;
+            _rigidBody.useGravity = false;*/
 
 
         Vector3 diff = transform.position - camera.transform.position;
@@ -57,12 +68,22 @@ public class PlayerMovement : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
         }
 
-        float speed = _animator.GetBool("isRunning") ? runSpeed : moveSpeed;
+        float speed;
+        _wallCollisionCheck = Physics.Raycast(transform.position, fixedForward, out _wallHit, _collider.radius, wallsLayer);
+        if(!_wallCollisionCheck)
+            _wallCollisionCheck = Physics.Raycast(transform.position, fixedRight, out _wallHit, _collider.radius, wallsLayer);
+        Debug.Log("Is ray colliding a wall? " + _wallCollisionCheck);
+
+        if (_wallCollisionCheck)
+            speed = 0f;
+        else
+            speed = _animator.GetBool("isRunning") ? runSpeed : moveSpeed;
+
 
         transform.Translate(cameraRelativeMovement * speed * Time.deltaTime, Space.World);
 
         transform.position = new Vector3(transform.position.x,
-                                         playableTerrain.SampleHeight(transform.position) - 0.1f,
+                                         playableTerrain.SampleHeight(transform.position) - 0.01f,
                                          transform.position.z);
     }
 }

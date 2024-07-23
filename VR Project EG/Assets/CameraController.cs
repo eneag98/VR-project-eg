@@ -7,6 +7,8 @@ public class CameraController : MonoBehaviour
 {
     public Transform target;
     public Vector3 constDistance;
+    public float minFOV = 55f;
+    public float maxFOV = 90f;
     public float scrollSpeed;
     public float rotationSpeed;
 
@@ -21,11 +23,22 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         transform.position = target.position;
+        float scrollAmount = Input.GetAxis("Mouse ScrollWheel");
 
-        if (m_Camera.orthographic)
-            m_Camera.orthographicSize -= Input.GetAxis("Mouse ScrollWheel") * scrollSpeed;
-        else
-            m_Camera.fieldOfView -= Input.GetAxis("Mouse ScrollWheel") * scrollSpeed;
+        /*if (m_Camera.orthographic)
+            m_Camera.orthographicSize -= scrollAmount * scrollSpeed;
+        else*/
+        if(scrollAmount != 0f)
+        {
+            m_Camera.fieldOfView -= scrollAmount * scrollSpeed;
+
+            if(m_Camera.fieldOfView < minFOV)
+                m_Camera.fieldOfView = minFOV;
+
+            if(m_Camera.fieldOfView > maxFOV)
+                m_Camera.fieldOfView = maxFOV;
+        }
+            
 
         bool dx = Input.GetKey(KeyCode.Mouse1);
         if (dx)
