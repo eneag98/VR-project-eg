@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class AnimationController : MonoBehaviour
 {
+    public float speed = 5f;
+    public float rotationSpeed = 720f;
+
     Animator animator;
     int isWalkingHash;
     int isWalkingBackwardHash;
@@ -105,25 +108,22 @@ public class AnimationController : MonoBehaviour
         if (rightPressed && leftPressed)
             return;
 
-        if (forwardPressed && backwardPressed)
-            return;
+        float forward = forwardPressed ? 1f : 0f;
+        float right = rightPressed ? 1f : 0f;
+        float left = leftPressed ? -1f : 0f;
 
-        if (!forwardPressed && !backwardPressed)
-            return;
+        Vector3 movementDirection = new Vector3( right != 0 ? right : left, 0f, forward);
+        movementDirection.Normalize();
+        Debug.Log(movementDirection);
 
-        Vector3 currentPosition = transform.position;
+        transform.Translate(movementDirection * speed * Time.deltaTime, Space.World );
 
-        float rot = 0f;
-        if (leftPressed && !rightPressed)
-            rot = forwardPressed ? -1.0f : 1.0f;
-        else if (rightPressed && !leftPressed)
-            rot = forwardPressed ? 1.0f : -1.0f;
+        if(movementDirection != Vector3.zero)
+        {
+            Quaternion toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
 
-        Vector3 newPosition = new Vector3(rot, 0f, 1f);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);  
+        }
 
-        Vector3 positionToLookAt = currentPosition + newPosition;
-
-        transform.LookAt(positionToLookAt);
-        
     }
 }

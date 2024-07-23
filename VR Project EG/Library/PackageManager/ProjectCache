@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638568287572305224
-    m_Hash: 3121269063
+      ticks: 638570606652402889
+    m_Hash: 269356008
   m_LockFileStatus:
     m_FilePath: D:/Progetti/ProgettoAltec/VR-project-eg/VR Project EG/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638568287572831060
-    m_Hash: 2134319831
+      ticks: 638570606652412865
+    m_Hash: 2517514487
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
