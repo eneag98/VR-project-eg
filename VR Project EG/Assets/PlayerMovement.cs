@@ -1,41 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using static UnityEngine.GraphicsBuffer;
-using static UnityEngine.UI.Image;
+
 
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed;
     public float runSpeed;
     public float rotationSpeed;
-    public Camera camera;
     public Terrain playableTerrain;
 
     [Header("Invisible Walls Detection")]
     [SerializeField] LayerMask wallsLayer;
-    [SerializeField] Material wallMaterial;
     public float deceleration = 0.2f;
 
+    Camera _camera;
     Animator _animator;
-    Rigidbody _rigidBody;
     CapsuleCollider _collider;
     bool _wallCollisionCheck;
-
-    RaycastHit _wallHit;
 
     // Start is called before the first frame update
     void Start()
     {
+        _camera = FindFirstObjectByType<Camera>();
         _animator = GetComponent<Animator>();
-        _rigidBody = GetComponent<Rigidbody>();
         _collider = GetComponent<CapsuleCollider>();
     }
 
     // Update is called once per frame
     void Update()
     {
+
+
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
         bool runningPressed = Input.GetKey("left shift");
@@ -44,21 +38,13 @@ public class PlayerMovement : MonoBehaviour
         _animator.SetBool("isWalking", isWalking);
         _animator.SetBool("isRunning", runningPressed && isWalking);
 
-        /*
-        if (!isWalking)
-        {
-            _rigidBody.useGravity = true;
-            return;
-        } else
-            _rigidBody.useGravity = false;*/
-
-
-        Vector3 diff = transform.position - camera.transform.position;
-        Vector3 forward = Vector3.ProjectOnPlane(diff, Vector3.up);
-        Vector3 right = camera.transform.right;
+        Vector3 diff = transform.position - _camera.transform.position;
+        Vector3 forward = Vector3.ProjectOnPlane(diff, Vector3.up).normalized;
+        Vector3 right = _camera.transform.right.normalized;
 
         Vector3 fixedForward = verticalInput * forward;
         Vector3 fixedRight = horizontalInput * right;
+
         Vector3 cameraRelativeMovement = fixedForward + fixedRight;
         cameraRelativeMovement.Normalize();
 
@@ -69,10 +55,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
         float speed;
-        _wallCollisionCheck = Physics.Raycast(transform.position, fixedForward, out _wallHit, _collider.radius, wallsLayer);
+        _wallCollisionCheck = Physics.Raycast(transform.position, fixedForward, _collider.radius, wallsLayer);
         if(!_wallCollisionCheck)
-            _wallCollisionCheck = Physics.Raycast(transform.position, fixedRight, out _wallHit, _collider.radius, wallsLayer);
-        Debug.Log("Is ray colliding a wall? " + _wallCollisionCheck);
+            _wallCollisionCheck = Physics.Raycast(transform.position, fixedRight, _collider.radius, wallsLayer);
 
         if (_wallCollisionCheck)
             speed = 0f;

@@ -24,14 +24,9 @@ public class WallController : MonoBehaviour
         _max = _boxCollider.size.y;
     }
 
-    private void OnTriggerEnter()
-    {
-        _material.color = new Color(_color.r, _color.g, _color.b, 0.3f);
-    }
-
     void OnTriggerExit(Collider other)
     {
-        _material.color = new Color(_color.r, _color.g, _color.b, 0f);
+        _material.color = new Color(_color.r, _color.g, _color.b, _min);
     }
 
     void OnTriggerStay(Collider other)

@@ -5,17 +5,22 @@ using UnityEngine;
 public class GameTarget : MonoBehaviour
 {
     public float floatingSpeed = 1f;
+
+    LevelManager _levelManager;
     Vector3 _lowerPos;
     Vector3 _upperPos;
 
     bool _isMoving;
-    
+
+    private void Start()
+    {
+        _levelManager = LevelManager.Instance;
+    }
 
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         _isMoving = true;
-        
         _lowerPos = transform.position + new Vector3(0f, -2f, 0f);
         _upperPos = transform.position + new Vector3(0f, 2f, 0f);
     }
@@ -31,5 +36,7 @@ public class GameTarget : MonoBehaviour
     {
         _isMoving = false;
         Debug.Log("WIN!");
+        _levelManager.WinGame();
+        gameObject.SetActive(false);
     }
 }

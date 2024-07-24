@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     {
         MENU,
         GAME,
+        WIN,
         PAUSE
     }
 
@@ -24,21 +25,19 @@ public class GameManager : MonoBehaviour
         _state = State.MENU;
     }
 
-    // Update is called once per frame
-    void Update()
+    public bool IsGameStarted()
     {
-
-
+        return _state == State.GAME;
     }
 
-    public bool pauseAvailable()
+    public bool PauseAvailable()
     {
-        return _state != State.MENU;
+        return _state != State.MENU && _state != State.WIN;
     }
 
-    public void pauseGame(bool choice)
+    public void PauseGame(bool choice)
     {
-        if (_state == State.MENU) 
+        if (_state == State.MENU || _state == State.WIN) 
             return; //can't pause the main menu scene
 
         if (choice)
@@ -46,11 +45,14 @@ public class GameManager : MonoBehaviour
         else
             _state = State.GAME;
     }
-    
+
+    public void WinGame()
+    {
+        _state = State.WIN;
+    }
 
     public void OnClickStartGame()
     {
-        Debug.Log("Start Game button pressed!");
         SceneManager.LoadScene("GameScene");
 
         _state = State.GAME;
@@ -58,21 +60,13 @@ public class GameManager : MonoBehaviour
 
     public void OnClickExitGame()
     {
-        Debug.Log("Exit button pressed!");
         Application.Quit();
     }
 
     public void OnClickMainMenu()
     {
-        Debug.Log("Main Menu button pressed!");
         SceneManager.LoadScene("MainMenuScene");
 
         _state = State.MENU;
-    }
-
-    public void OnClickRestartGame()
-    {
-        Debug.Log("Restart button pressed!");
-        return;
     }
 }
