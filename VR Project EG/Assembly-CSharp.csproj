@@ -60,14 +60,14 @@
     <Analyzer Include="D:\Unity\2022.3.13f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\WallController.cs" />
-    <Compile Include="Assets\CharacterMovements.cs" />
+    <Compile Include="Assets\StickmanPlayer\Script\PlayerMovement.cs" />
     <Compile Include="Assets\LevelManager.cs" />
-    <Compile Include="Assets\CameraController.cs" />
-    <Compile Include="Assets\Models\Animations\AnimationController.cs" />
-    <Compile Include="Assets\PlayerMovement.cs" />
+    <Compile Include="Assets\Environment\Scripts\WallController.cs" />
+    <Compile Include="Assets\StickmanPlayer\Script\CameraController.cs" />
     <Compile Include="Assets\GameTarget.cs" />
     <Compile Include="Assets\GameManager.cs" />
+    <Compile Include="Assets\StickmanPlayer\Script\CharacterMovements.cs" />
+    <Compile Include="Assets\StickmanPlayer\Animations\AnimationController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
